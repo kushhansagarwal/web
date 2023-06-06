@@ -21,17 +21,27 @@ export async function POST({ request }) {
 		.withClassName('Text')
 		.withFields('time sender content _additional { distance certainty }')
 		.withWhere({
-			operator: 'Or',
+			operator: 'And',
 			operands: [
 				{
-					path: ['sender'],
-					operator: 'Equal',
-					valueText: 'Kush'
+					operator: 'Or',
+					operands: [
+						{
+							path: ['sender'],
+							operator: 'Equal',
+							valueText: 'Kush'
+						},
+						{
+							path: ['sender'],
+							operator: 'Equal',
+							valueText: 'Sananshi Pidyar'
+						}
+					]
 				},
 				{
-					path: ['sender'],
-					operator: 'Equal',
-					valueText: 'Sananshi Pidyar'
+					path: ['content'],
+					operator: 'NotEqual',
+					valueText: 'image omitted'
 				}
 			]
 		})

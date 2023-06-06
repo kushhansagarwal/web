@@ -37,7 +37,7 @@
 		// 	})
 		// });
 
-        const res = await fetch('/api/query', {
+		const res = await fetch('/api/query', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
@@ -68,30 +68,48 @@
 	var texts: Text[] = [];
 </script>
 
-<div>
-	<div class="navbar rounded-lg m-3 bg-base-200">
-		<p class="btn btn-ghost normal-case text-xl">a trip down memory lane</p>
-	</div>
-	<div class="w-full m-3 text-center">
-		<input
-			bind:value={$text}
-			type="text"
-			placeholder="Type here"
-			class="input input-bordered w-full max-w-lg"
-		/>
-		<button
-			class="btn btn-primary"
-			on:click={async () => {
-				promise = getTexts();
-			}}>go!</button
-		>
+<div class="p-5">
+	<div class="navbar bg-base-200">
+		<div class="flex-1">
+			<a class="btn btn-ghost normal-case text-xl">a trip down memory lane</a>
+		</div>
+		<div class="flex-none gap-2">
+			<div class="form-control">
+				<input
+					bind:value={$text}
+					type="text"
+					placeholder="Search"
+					class="input input-bordered w-24 md:w-auto"
+				/>
+			</div>
+			<button class="btn btn-square">
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<svg
+					xmlns="http://www.w3.org/2000/svg"
+					class="h-6 w-6"
+					on:click={async () => {
+						promise = getTexts();
+					}}
+					fill="none"
+					viewBox="0 0 24 24"
+					stroke="currentColor"
+					><path
+						stroke-linecap="round"
+						stroke-linejoin="round"
+						stroke-width="2"
+						d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"
+					/></svg
+				>
+			</button>
+		</div>
 	</div>
 	<div class="divider" />
 
-	<!-- make a list of tiles -->
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#await promise}
-			<p>...waiting</p>
+			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
+			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
+			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
 		{:then texts}
 			{#each texts as text}
 				<div class="bg-base-300 p-5 rounded-xl m-2 text-center">
@@ -117,7 +135,11 @@
 				</div>
 			{/each}
 		{:catch error}
-			<p style="color: red">{error.message}</p>
+        <div class="toast animate-pulse">
+            <div class="alert alert-error">
+              <span>Internal server error</span>
+            </div>
+          </div>
 		{/await}
 	</div>
 </div>
