@@ -89,7 +89,7 @@
 	<div class="divider" />
 
 	<!-- make a list of tiles -->
-	<div class="grid grid-cols-3">
+	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#await promise}
 			<p>...waiting</p>
 		{:then texts}
