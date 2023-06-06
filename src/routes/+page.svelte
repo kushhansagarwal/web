@@ -69,7 +69,7 @@
 </script>
 
 <div class="p-5">
-	<div class="navbar bg-base-200">
+	<div class="navbar bg-base-200 sticky top-0 z-50">
 		<div class="flex-1">
 			<a class="btn btn-ghost normal-case text-xl">a trip down memory lane</a>
 		</div>
@@ -103,8 +103,7 @@
 			</button>
 		</div>
 	</div>
-	<div class="divider" />
-
+    <div class="divider"></div>
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#await promise}
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
@@ -135,11 +134,14 @@
 				</div>
 			{/each}
 		{:catch error}
-        <div class="toast animate-pulse">
+			<div class="hero min-h-screen bg-base-300  col-span-3 w-96">
+				<div class="hero-content text-center" />
+			</div>
+			<!-- <div class="toast animate-pulse">
             <div class="alert alert-error">
               <span>Internal server error</span>
             </div>
-          </div>
+          </div> -->
 		{/await}
 	</div>
 </div>
