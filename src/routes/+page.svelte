@@ -16,7 +16,7 @@
 
 		const month = parseInt(date[0]);
 		const day = parseInt(date[1]);
-		const year = parseInt(20+date[2]);
+		const year = parseInt(20 + date[2]);
 		const hour = parseInt(time[0]);
 		const minute = parseInt(time[1]);
 		const second = parseInt(time[2]);
@@ -26,7 +26,18 @@
 	}
 
 	async function getTexts() {
-		const res = await fetch('http://127.0.0.1:5000/query', {
+		// const res = await fetch('http://127.0.0.1:5000/query', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify({
+		// 		collection_name: 'Text',
+		// 		query: $text
+		// 	})
+		// });
+
+        const res = await fetch('/api/query', {
 			method: 'POST',
 			headers: {
 				'Content-Type': 'application/json'
