@@ -1,6 +1,10 @@
 <script lang="ts">
+	import ChatBubble from '../components/ChatBubble.svelte';
+
 	import { json } from '@sveltejs/kit';
 	import { text } from './stores';
+
+	let showModal = false;
 
 	async function getTexts() {
 		// const res = await fetch('http://127.0.0.1:5000/query', {
@@ -25,10 +29,10 @@
 			})
 		});
 
-		texts = await res.json();
+		textsToShow = await res.json();
 
 		if (res.ok) {
-			return texts;
+			return textsToShow;
 		} else {
 			throw new Error(res.statusText);
 		}
@@ -42,9 +46,11 @@
 		content: string;
 		image: string;
 		chat: string;
-		_additional: string;
+		_additional: {
+			certainty: number;
+		};
 	}
-	var texts: Text[] = [];
+	var textsToShow: Text[] = [];
 </script>
 
 <div class="p-5">
@@ -89,27 +95,27 @@
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
 		{:then texts}
-			{#each texts as text}
-				<div class="bg-base-300 p-5 rounded-xl m-2 text-center">
-					<div class="chat chat-start">
-						<div class="chat-image avatar">
-							<div class="w-10 rounded-full">
-								<img src={text.image} alt="img" />
-							</div>
-						</div>
-						<div class="chat-header">
-							{text.sender}
-						</div>
-						<div class="chat-bubble bg-base-100 text-left">{text.content}</div>
-						<div class="chat-footer opacity-50">
-							{new Date(parseInt(text.time)).toLocaleDateString('en-US', {
-								weekday: 'long',
-								year: 'numeric',
-								month: 'long',
-								day: 'numeric'
-							})}
-						</div>
-					</div>
+			{#each texts as textMessage}
+				<!-- svelte-ignore a11y-click-events-have-key-events -->
+				<div
+					class="bg-base-300 p-5 rounded-xl m-2 text-center"
+					on:click={async () => {
+						const res = await fetch('/api/context', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({
+								time: textMessage.time,
+								chat: textMessage.chat
+							})
+						});
+
+						textsToShow = await res.json();
+						console.log(textsToShow)
+					}}
+				>
+					<ChatBubble data={textMessage} />
 				</div>
 			{/each}
 		{:catch error}
