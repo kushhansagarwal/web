@@ -3,8 +3,9 @@
 
 	import { json } from '@sveltejs/kit';
 	import { text } from './stores';
+	import Phone from '../components/Phone.svelte';
 
-	let showModal = false;
+	let showPhone = false;
 
 	async function getTexts() {
 		// const res = await fetch('http://127.0.0.1:5000/query', {
@@ -38,7 +39,49 @@
 		}
 	}
 
-	let promise = getTexts();
+	async function getContext(time: String, chat: String) {
+		// const res = await fetch('http://127.0.0.1:5000/query', {
+		// 	method: 'POST',
+		// 	headers: {
+		// 		'Content-Type': 'application/json'
+		// 	},
+		// 	body: JSON.stringify({
+		// 		collection_name: 'Text',
+		// 		query: $text
+		// 	})
+		// });
+
+		const res = await fetch('/api/context', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				time: time,
+				chat: chat
+			})
+		});
+
+		textsToShow = await res.json();
+
+		if (res.ok) {
+			showPhone = true;
+			return textsToShow;
+		} else {
+			throw new Error(res.statusText);
+		}
+	}
+
+	let searchPromise: Promise<Text[]> = Promise.resolve([]);
+	let contextPromise: Promise<Text[]> = Promise.resolve([]);
+
+	function search() {
+		searchPromise = getTexts();
+	}
+
+	function showContext(time: String, chat: String) {
+		contextPromise = getContext(time, chat);
+	}
 
 	interface Text {
 		time: string;
@@ -73,7 +116,7 @@
 					xmlns="http://www.w3.org/2000/svg"
 					class="h-6 w-6"
 					on:click={async () => {
-						promise = getTexts();
+						search();
 					}}
 					fill="none"
 					viewBox="0 0 24 24"
@@ -89,8 +132,16 @@
 		</div>
 	</div>
 	<div class="divider" />
+	{#if showPhone}
+		{#await contextPromise}
+			<!-- <Phone class="animate-pulse"></Phone> -->
+			Loading...
+		{:then texts}
+			<Phone data={texts} />
+		{/await}
+	{/if}
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
-		{#await promise}
+		{#await searchPromise}
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
@@ -100,33 +151,18 @@
 				<div
 					class="bg-base-300 p-5 rounded-xl m-2 text-center"
 					on:click={async () => {
-						const res = await fetch('/api/context', {
-							method: 'POST',
-							headers: {
-								'Content-Type': 'application/json'
-							},
-							body: JSON.stringify({
-								time: textMessage.time,
-								chat: textMessage.chat
-							})
-						});
-
-						textsToShow = await res.json();
-						console.log(textsToShow)
+						showContext(textMessage.time, textMessage.chat);
 					}}
 				>
 					<ChatBubble data={textMessage} />
 				</div>
 			{/each}
 		{:catch error}
-			<div class="hero min-h-screen bg-base-300 col-span-3 w-96">
-				<div class="hero-content text-center" />
+			<div class="toast animate-pulse">
+				<div class="alert alert-error">
+					<span>Enter a search term!</span>
+				</div>
 			</div>
-			<!-- <div class="toast animate-pulse">
-            <div class="alert alert-error">
-              <span>Internal server error</span>
-            </div>
-          </div> -->
 		{/await}
 	</div>
 </div>
