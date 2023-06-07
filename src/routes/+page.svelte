@@ -50,7 +50,7 @@
 <div class="p-5">
 	<div class="navbar bg-base-200 sticky top-0 z-50">
 		<div class="flex-1">
-			<a class="btn btn-ghost normal-case text-xl">a trip down memory lane</a>
+			<a class="btn btn-ghost normal-case text-xl">a trip down memory lane.</a>
 		</div>
 		<div class="flex-none gap-2">
 			<div class="form-control">
