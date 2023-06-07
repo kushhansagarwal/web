@@ -12,6 +12,7 @@ export async function POST({ request }) {
 		host: 'text-gpt-3zss9391.weaviate.network',
 		headers: { 'X-OpenAI-Api-Key': API_KEY },
 		apiKey: new weaviate.ApiKey(WEAVIATE)
+		
 	});
 
 	const nearText = {
