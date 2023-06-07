@@ -20,7 +20,7 @@
 				'Content-Type': 'application/json'
 			},
 			body: JSON.stringify({
-				chat: "IM",
+				chat: 'IM',
 				query: $text
 			})
 		});
@@ -82,7 +82,7 @@
 			</button>
 		</div>
 	</div>
-    <div class="divider"></div>
+	<div class="divider" />
 	<div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3">
 		{#await promise}
 			<div class="bg-base-300 p-5 rounded-xl m-2 text-center h-28 animate-pulse" />
@@ -94,10 +94,7 @@
 					<div class="chat chat-start">
 						<div class="chat-image avatar">
 							<div class="w-10 rounded-full">
-								<img
-									src={text.image}
-									alt="img"
-								/>
+								<img src={text.image} alt="img" />
 							</div>
 						</div>
 						<div class="chat-header">
@@ -105,13 +102,18 @@
 						</div>
 						<div class="chat-bubble bg-base-100 text-left">{text.content}</div>
 						<div class="chat-footer opacity-50">
-							{text.time}
+							{new Date(parseInt(text.time)).toLocaleDateString('en-US', {
+								weekday: 'long',
+								year: 'numeric',
+								month: 'long',
+								day: 'numeric'
+							})}
 						</div>
 					</div>
 				</div>
 			{/each}
 		{:catch error}
-			<div class="hero min-h-screen bg-base-300  col-span-3 w-96">
+			<div class="hero min-h-screen bg-base-300 col-span-3 w-96">
 				<div class="hero-content text-center" />
 			</div>
 			<!-- <div class="toast animate-pulse">
