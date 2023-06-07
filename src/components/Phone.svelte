@@ -18,8 +18,8 @@
 <div class="mockup-phone">
 	<div class="camera" />
 	<div class="display">
-		<div class="artboard artboard-demo phone-1 pt-10">
-			<div class="overflow-scroll ">
+		<div class="artboard artboard-demo phone-1">
+			<div class="overflow-scroll pt-10">
 				{#each data as textMessage}
 					<div class="bg-base-300 p-2 rounded-xl m-2 text-center">
 						<ContextBubble data={textMessage} />
